@@ -1,26 +1,37 @@
-#TODO пустая строка возвращает 0
-#TODO два числа через запятую возвращают сумму
+# TODO пустая строка возвращает 0
+# TODO два числа через запятую возвращают сумму
+# TODO одно число возвращает это число
 
-#TODO одно число возвращает это число
+# TODO
+
 import pytest
 
 from string_calculator.string_calculator import StringCalculator
 
 
-class TestStringCalculator:
+@pytest.fixture
+def string_calculator():
+    return StringCalculator()
 
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.string_calculator = StringCalculator()
+def test_add_empty_return_zero(string_calculator):
+    result = string_calculator.add("")
+    assert result == 0
 
-    def test_empty_return_zero(self):
-        result = self.string_calculator.add("")
-        assert result == 0
+def test_add_single_number_return_it_self(string_calculator):
+    result = string_calculator.add("1")
+    assert result == 1
 
-    def test_single_number_return_it_self(self):
-        result = self.string_calculator.add("1")
-        assert result == 1
+@pytest.mark.parametrize(
+    ("input_value", "expected_value"),
+    [
+        ("1,2", 3),
+        ("1,2,3", 6),
+    ],
+)
+def test_add_separate_by_comma(string_calculator, input_value: str, expected_value: int):
+    result = string_calculator.add(input_value)
+    assert result == expected_value
 
-    def test_two_numbers_returns_their_sum(self):
-        result = self.string_calculator.add("1,2")
-        assert result == 3
+def test_add_separate_by_end_of_line(string_calculator):
+    result = string_calculator.add("1,2\n3")
+    assert result == 6 
