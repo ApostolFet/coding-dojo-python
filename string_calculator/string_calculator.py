@@ -6,5 +6,11 @@ class StringCalculator:
         if not value:
             return 0
 
-        value_list = re.split(',|\n', value)
+        if value.startswith("//"):
+            delimeter, value = value[2:].split("\n")
+        else:
+            delimeter = ',|\n'
+
+
+        value_list = re.split(delimeter, value)
         return sum(map(int, value_list))
