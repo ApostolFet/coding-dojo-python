@@ -1,7 +1,10 @@
+import re
+
+
 class StringCalculator:
     def add(self, value: str) -> int:
         if not value:
             return 0
 
-        value_list = value.split(",")
+        value_list = re.split(',|\n', value)
         return sum(map(int, value_list))
